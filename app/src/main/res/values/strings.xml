@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FixItReminder</string>
+    <string name="time_mins">Minutes</string>
+    <string name="time_hrs">Hours</string>
+    <string name="reminder_text">Text you would like to be shown</string>
+    <string name="button_text">Save</string>
+    <string name="hint">-</string>
+
 </resources>
