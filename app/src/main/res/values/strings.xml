@@ -4,6 +4,6 @@
     <string name="time_hrs">Hours</string>
     <string name="reminder_text">Text you would like to be shown</string>
     <string name="button_text">Save</string>
-    <string name="hint">-</string>
+
 
 </resources>

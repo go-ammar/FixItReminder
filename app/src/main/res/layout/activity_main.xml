@@ -30,13 +30,12 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="@string/reminder_text"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/hint"
+        android:hint="@string/reminder_text"
         android:autofillHints="" />
 
     <EditText
@@ -47,11 +46,10 @@
         android:foregroundGravity="center"
         android:gravity="center"
         android:inputType="number"
-        android:text="@string/time_hrs"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/editTextMins"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/hint"
+        android:hint="@string/time_hrs"
         android:autofillHints="0" />
 
     <EditText
@@ -62,10 +60,9 @@
         android:foregroundGravity="center"
         android:gravity="center|center_vertical"
         android:inputType="number"
-        android:text="@string/time_mins"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/editTextHours"
-        android:hint="@string/hint"
+        android:hint="@string/time_mins"
         android:autofillHints="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
