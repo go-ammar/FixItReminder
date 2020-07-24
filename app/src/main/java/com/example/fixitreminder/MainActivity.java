@@ -20,8 +20,12 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mins;
     EditText hours;
-    int delay;
+
     int totalDelay;
+
+    Runnable runnable;
+    Handler handler = new Handler();
+
     boolean isScreenOn;
 
 
@@ -37,18 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO what happens when you click the save button? logic goes here.
-                int mMins, mHours;
-
-                mMins = Integer.parseInt(mins.getText().toString());
-                mHours = Integer.parseInt(hours.getText().toString());
-                delay = mMins + (mHours*60);
-                totalDelay = delay*1000*60;
-
+                totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
+                String reminderText = message.getText().toString();
 
             }
         });
@@ -56,14 +54,28 @@ public class MainActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
+        handler.postDelayed(runnable = new Runnable() {
             public void run() {
-                //TODO your background code
-                Log.d("humariApp", "onCreate " + isScreenOn);
-
+                //do something
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                isScreenOn = pm.isInteractive();
+                Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, totalDelay);
             }
-        });
+        }, totalDelay);
+
+
+//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        isScreenOn = pm.isInteractive();
+//
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                //TODO your background code
+//                Log.d("humariApp", "onCreate " + isScreenOn);
+//
+//            }
+//        });
 
 
     }
@@ -71,28 +83,42 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
+        handler.postDelayed(runnable = new Runnable() {
             public void run() {
+                //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
-                //Write your code here
-                Log.d("humariApp", "onStop with delay " + isScreenOn);
+                Log.d("humariApp", "onStop after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, totalDelay);
             }
-        }, 5000);
+        }, totalDelay);
 
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                //TODO your background code
-                Log.d("humariApp", "onStop " + isScreenOn);
-
-            }
-        });
+//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        isScreenOn = pm.isInteractive();
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//                isScreenOn = pm.isInteractive();
+//                //Write your code here
+//                Log.d("humariApp", "onStop with delay " + isScreenOn);
+//            }
+//        }, 5000);
+//
+//
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                //TODO your background code
+//                Log.d("humariApp", "onStop " + isScreenOn);
+//
+//            }
+//        });
     }
 
     @Override
@@ -100,43 +126,73 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
-        AsyncTask.execute(new Runnable() {
-            @Override
+
+        handler.postDelayed(runnable = new Runnable() {
             public void run() {
-                //TODO your background code
-                Log.d("humariApp", "onPause " + isScreenOn);
+                //do something
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                isScreenOn = pm.isInteractive();
+                Log.d("humariApp", "onPause after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, totalDelay);
             }
-        });
+        }, totalDelay);
+
+
+//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        isScreenOn = pm.isInteractive();
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                //TODO your background code
+//                Log.d("humariApp", "onPause " + isScreenOn);
+//            }
+//        });
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
+        handler.postDelayed(runnable = new Runnable() {
             public void run() {
+                //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
-                //Write your code here
-                Log.d("humariApp", "onResume with delay " + isScreenOn);
+                Log.d("humariApp", "onResume after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, totalDelay);
             }
-        }, 5000);
+        }, totalDelay);
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                //TODO your background code
-                Log.d("humariApp", "onResume " + isScreenOn);
-            }
-        });
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//                isScreenOn = pm.isInteractive();
+//                //Write your code here
+//                Log.d("humariApp", "onResume with delay " + isScreenOn);
+//            }
+//        }, 5000);
+//
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                //TODO your background code
+//                Log.d("humariApp", "onResume " + isScreenOn);
+//            }
+//        });
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
+
+
+
+        Log.d("humariApp", "onDestroy: ");
+
 
     }
 
