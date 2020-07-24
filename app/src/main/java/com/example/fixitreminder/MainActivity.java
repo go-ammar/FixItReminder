@@ -2,6 +2,7 @@ package com.example.fixitreminder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mins;
     EditText hours;
-
+    int delay;
+    int totalDelay;
     boolean isScreenOn;
 
 
@@ -33,10 +35,20 @@ public class MainActivity extends AppCompatActivity {
         mins = (EditText) findViewById(R.id.editTextMins);
         hours = (EditText) findViewById(R.id.editTextHours);
 
+
+
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO what happens when you click the save button? logic goes here.
+                int mMins, mHours;
+
+                mMins = Integer.parseInt(mins.getText().toString());
+                mHours = Integer.parseInt(hours.getText().toString());
+                delay = mMins + (mHours*60);
+                totalDelay = delay*1000*60;
+
 
             }
         });
@@ -125,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        dontDestroyPls
+
     }
 
 
