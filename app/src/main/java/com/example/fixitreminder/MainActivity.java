@@ -20,8 +20,10 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mins;
     EditText hours;
+    DatabaseHelper mHelper;
 
-    int totalDelay;
+
+    int totalDelay = 5000;
 
     Runnable runnable;
     Handler handler = new Handler();
@@ -38,15 +40,17 @@ public class MainActivity extends AppCompatActivity {
         mButton = (Button) findViewById(R.id.saveButton);
         mins = (EditText) findViewById(R.id.editTextMins);
         hours = (EditText) findViewById(R.id.editTextHours);
-
+        mHelper = new DatabaseHelper(this);
 
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO what happens when you click the save button? logic goes here.
-                totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
-                String reminderText = message.getText().toString();
+                //totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
+
+                mHelper.insertData(1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60),
+                        message.getText().toString());
 
             }
         });

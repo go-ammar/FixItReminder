@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -16,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public DatabaseHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, table1 , null, 1);
 
 
     }
@@ -46,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean insertData(String time, String comment){
+    public boolean insertData(int time, String comment){
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -57,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(table1, null, contentValues);
         db.setTransactionSuccessful();
         db.endTransaction();
+        Log.d("humariApp", "Data entered successfully: ");
         return true;
 
     }
