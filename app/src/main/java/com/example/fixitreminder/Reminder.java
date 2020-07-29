@@ -9,14 +9,16 @@ import android.widget.TextView;
 public class Reminder extends AppCompatActivity {
 
     TextView mReminders;
-    Database db;
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
 
         Log.d("humariApp", "onCreate reminder activity: ");
-        db = new Database(this);
+        db = new DatabaseHelper(this);
         mReminders.setText(db.getData());
     }
+
+
 }

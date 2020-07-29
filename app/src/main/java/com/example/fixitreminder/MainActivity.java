@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mins;
     EditText hours;
-    Database mHelper;
+    DatabaseHelper mHelper;
     Button mButtonshift;
 
     int totalDelay = 5000;
@@ -35,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mHelper = new DatabaseHelper(this);
 
         message = findViewById(R.id.EditTextmessage);
         mButton =  findViewById(R.id.saveButton);
         mins = findViewById(R.id.editTextMins);
         hours =  findViewById(R.id.editTextHours);
         mButtonshift = findViewById(R.id.shift_button);
-        mHelper = new Database(this);
-        mHelper.open();
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,14 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
                 mHelper.insertData(1000 * 60 * Integer.parseInt(mins.getText().toString()) +
                                 (Integer.parseInt(hours.getText().toString()) * 60),
-                                message.getText().toString().trim());
+                        message.getText().toString().trim());
 
                 message.setText(R.string.reminder_text);
                 mins.setText(R.string.time_mins);
                 hours.setText(R.string.time_hrs);
             }
         });
-        mHelper.close();
 
         mButtonshift.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
-     //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, totalDelay);
             }
         }, totalDelay);
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
-  //              Log.d("humariApp", "onStop after delay again and again: " + isScreenOn);
+                //              Log.d("humariApp", "onStop after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, totalDelay);
             }
         }, totalDelay);
@@ -150,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
- //               Log.d("humariApp", "onPause after delay again and again: " + isScreenOn);
+                //               Log.d("humariApp", "onPause after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, totalDelay);
             }
         }, totalDelay);
@@ -178,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
-   //             Log.d("humariApp", "onResume after delay again and again: " + isScreenOn);
+                //             Log.d("humariApp", "onResume after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, totalDelay);
             }
         }, totalDelay);
