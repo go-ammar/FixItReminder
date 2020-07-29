@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mins;
     EditText hours;
-    DatabaseHelper mHelper;
+    Database mHelper;
 
 
     int totalDelay = 5000;
@@ -36,22 +36,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        message = (EditText) findViewById(R.id.EditTextmessage);
-        mButton = (Button) findViewById(R.id.saveButton);
-        mins = (EditText) findViewById(R.id.editTextMins);
-        hours = (EditText) findViewById(R.id.editTextHours);
-        mHelper = new DatabaseHelper(this);
+        message = findViewById(R.id.EditTextmessage);
+        mButton =  findViewById(R.id.saveButton);
+        mins = findViewById(R.id.editTextMins);
+        hours =  findViewById(R.id.editTextHours);
+        mHelper = new Database(this);
 
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO what happens when you click the save button? logic goes here.
-                //totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
+//totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
 
-                mHelper.insertData(1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60),
-                        message.getText().toString());
+                mHelper.insertData(1000 * 60 * Integer.parseInt(mins.getText().toString().trim()) +
+                                (Integer.parseInt(hours.getText().toString().trim()) * 60),
+                                message.getText().toString().trim());
 
+                message.setText(R.string.reminder_text);
+                mins.setText(R.string.time_mins);
+                hours.setText(R.string.time_hrs);
             }
         });
 
