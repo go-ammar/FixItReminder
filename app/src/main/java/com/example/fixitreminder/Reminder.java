@@ -15,10 +15,16 @@ public class Reminder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
 
+        mReminders = findViewById(R.id.textView);
+
         Log.d("humariApp", "onCreate reminder activity: ");
-        db = new DatabaseHelper(this);
+        try  {
+            DatabaseHelper databaseHelper = db = new DatabaseHelper(this);
+        }
+        catch (Exception e){
+            Log.d("HumariApp", "onCreate reminder "+ db.getData());
+        }
         mReminders.setText(db.getData());
     }
-
 
 }

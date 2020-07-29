@@ -18,19 +18,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_0 = "_ID";
     public static final String COL_1 = "_TIME";
     public static final String COL_2 = "_COMMENT";
+    public static final String COL_3 = "_ACTIVE";
 
 
-    public static final String CREATE_TABLE_FLIGHTS= "CREATE TABLE IF NOT EXISTS "+ table_name +" ("
-            +COL_0 +" INTEGER PRIMARY KEY AUTOINCREMENT , "
-            +COL_1 +" INTEGER, "
-            +COL_2 +" TEXT "
-            +");";
 
-
+    public static final String CREATE_TABLE_FLIGHTS = "CREATE TABLE IF NOT EXISTS " + table_name + " ("
+            + COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT , "
+            + COL_1 + " INTEGER, "
+            + COL_2 + " TEXT, "
+            + COL_3 + " BOOLEAN"
+            + ");";
 
 
     private DatabaseHelper dbHelper;
-    private SQLiteDatabase ourDatabase;
+    //private SQLiteDatabase ourDatabase;
 
 
     public DatabaseHelper(Context context) {
@@ -50,9 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        db.execSQL("CREATE TABLE " + table1 + " (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
 //                "_TIME INTEGER NOT NULL, _COMMENT TEXT NOT NULL)");
         db.execSQL(CREATE_TABLE_FLIGHTS);
-
-
-
 
 
         // this is code is better because it uses the variables. upara waala variables nahi use kr rha tha.
@@ -78,19 +76,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
-
-
     public void insertData(int time, String comment) {
 
+        SQLiteDatabase db = this.getWritableDatabase();
 //        SQLiteDatabase db = this.getWritableDatabase();
 //        db.beginTransaction();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_1, time);
         contentValues.put(COL_2, comment);
-        ourDatabase.insert(table_name, null, contentValues);
+        contentValues.put(COL_3, true);
+        db.insert(table_name, null, contentValues);
 //        ourDatabase.setTransactionSuccessful();
 //        ourDatabase.endTransaction();
         Log.d("humariApp", "Data entered successfully: ");
@@ -98,8 +94,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String getData() {
-        String[] columns = new String[] {COL_0, COL_1, COL_2};
-        Cursor cursor = ourDatabase.query(table_name, columns, null, null,
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COL_0, COL_1, COL_2, COL_3};
+        Cursor cursor = db.query(table_name, columns, null, null,
                 null, null, null);
         String comment = "";
         int iRowId = cursor.getColumnIndex(COL_0);
@@ -107,7 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int iRowComment = cursor.getColumnIndex(COL_2);
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            comment = comment + cursor.getString(iRowComment) + "/n";
+            comment = comment + cursor.getString(iRowComment) + "\n";
         }
         cursor.close();
 
