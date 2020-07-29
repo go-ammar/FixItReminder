@@ -27,42 +27,59 @@
         android:id="@+id/EditTextmessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:gravity="center"
+        android:hint="@string/reminder_text"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/reminder_text"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextHours"
         android:layout_width="93dp"
         android:layout_height="wrap_content"
+        android:autofillHints="0"
         android:ems="10"
         android:foregroundGravity="center"
         android:gravity="center"
+        android:hint="@string/time_hrs"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/editTextMins"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/time_hrs"
-        android:autofillHints="0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editTextMins"
         android:layout_width="93dp"
         android:layout_height="wrap_content"
+        android:autofillHints="0"
         android:ems="10"
         android:foregroundGravity="center"
         android:gravity="center|center_vertical"
+        android:hint="@string/time_mins"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/editTextHours"
-        android:hint="@string/time_mins"
-        android:autofillHints="0" />
+        app:layout_constraintStart_toEndOf="@id/editTextHours" />
+
+    <Button
+        android:id="@+id/shift_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/go_to_reminders_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/saveButton"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
 </androidx.constraintlayout.widget.ConstraintLayout>

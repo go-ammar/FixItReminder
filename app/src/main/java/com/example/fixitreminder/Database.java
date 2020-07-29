@@ -29,7 +29,7 @@ public class Database {
         ourContext = context;
     }
 
-    private class DatabaseHelp extends SQLiteOpenHelper {
+    public class DatabaseHelp extends SQLiteOpenHelper {
 
 
         public DatabaseHelp(@Nullable Context context) {
@@ -37,6 +37,10 @@ public class Database {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
+        @Override
+        public SQLiteDatabase getWritableDatabase() {
+            return super.getWritableDatabase();
+        }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
@@ -76,20 +80,25 @@ public class Database {
         dbHelper.close();
     }
 
-    public void insertData(int time, String comment) {
+    public long insertData(int time, String comment) {
 
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.beginTransaction();
+        ourDatabase = dbHelper.getWritableDatabase();
+        ourDatabase.beginTransaction();
+        Log.d("humariApp", "insertData: ");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_1, time);
         contentValues.put(COL_2, comment);
-        ourDatabase.insert(table1, null, contentValues);
-//        ourDatabase.setTransactionSuccessful();
-//        ourDatabase.endTransaction();
+        Log.d("humariApp", "insertData: "+ contentValues);
         Log.d("humariApp", "Data entered successfully: ");
+        ourDatabase.setTransactionSuccessful();
+        ourDatabase.endTransaction();
+
+        return ourDatabase.insert(DATABASE_NAME, null, contentValues);
 
     }
+
+
 
 
     public String getData() {
@@ -97,8 +106,8 @@ public class Database {
         Cursor cursor = ourDatabase.query(table1, columns, null, null,
                 null, null, null);
         String comment = "";
-        int iRowId = cursor.getColumnIndex(COL_0);
-        int iRowTime = cursor.getColumnIndex(COL_1);
+//        int iRowId = cursor.getColumnIndex(COL_0);
+//        int iRowTime = cursor.getColumnIndex(COL_1);
         int iRowComment = cursor.getColumnIndex(COL_2);
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {

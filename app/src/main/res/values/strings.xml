@@ -5,6 +5,7 @@
     <string name="reminder_text">Text you would like to be shown</string>
     <string name="button_text">Save</string>
     <string name="Comment_text">Comment</string>
+    <string name="go_to_reminders_button">Go to reminders</string>
 
 
 </resources>
