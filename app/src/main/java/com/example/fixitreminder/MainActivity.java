@@ -1,6 +1,7 @@
 package com.example.fixitreminder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 
 import android.content.Context;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler();
 
     boolean isScreenOn;
+    boolean mTimerRunning=false;
 
 
     //call resetTimer every time isScreenOn is false
@@ -52,13 +54,14 @@ public class MainActivity extends AppCompatActivity {
         hours = findViewById(R.id.editTextHours);
         mButtonshift = findViewById(R.id.shift_button);
 
-//        totalDelay = mHelper.getTimeData();
+        totalDelay = mHelper.getTimeData();
 
 //        setTime(totalDelay);
 //        startTimer();
 
 
 
+            //TODO this is how to show notification
 
 //        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
 //                .setSmallIcon(R.drawable.ic_launcher_background)
@@ -102,19 +105,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(isScreenOn){
-          startTimer();
+        //  startTimer(totalDelay);
         }
 
+        final Context context = this;
+        handler.postDelayed(runnable = new Runnable() {
+            public void run() {
+                //do something
+                if(!mTimerRunning) {
+                    startTimer(totalDelay, context);
+                }
 
-//        handler.postDelayed(runnable = new Runnable() {
-//            public void run() {
-//                //do something
-//                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-//                isScreenOn = pm.isInteractive();
-//                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
-//                handler.postDelayed(runnable, totalDelay);
-//            }
-//        }, totalDelay);
+                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, 1000);
+            }
+        }, 1000);
 
 
 //        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -142,15 +147,19 @@ public class MainActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
 
+
+        startTimer(totalDelay, this);
+
+
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
                 //              Log.d("humariApp", "onStop after delay again and again: " + isScreenOn);
-                handler.postDelayed(runnable, totalDelay);
+                handler.postDelayed(runnable, 1000);
             }
-        }, totalDelay);
+        }, 1000);
 
 //        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 //        isScreenOn = pm.isInteractive();
@@ -192,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }, totalDelay);
 
-
 //        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 //        isScreenOn = pm.isInteractive();
 //        AsyncTask.execute(new Runnable() {
@@ -215,11 +223,13 @@ public class MainActivity extends AppCompatActivity {
                 //do something
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
+
+
+
                 //             Log.d("humariApp", "onResume after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, totalDelay);
             }
         }, totalDelay);
-
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -250,22 +260,37 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setTime(long milliseconds) {
-        mStartTimeInMillis = milliseconds;
-        resetTimer();
-    }
+//
+//    private void setTime(long milliseconds) {
+//        mStartTimeInMillis = milliseconds;
+//        resetTimer();
+//    }
 
-    private void startTimer() {
+        private void startTimer(long totalTime, final Context context) {
+        mTimerRunning = true;
         mEndTime = System.currentTimeMillis() + mtimeLeftInMillis;
-        mCountDownTimer = new CountDownTimer(mtimeLeftInMillis, 1000) {
+        mCountDownTimer = new CountDownTimer(totalTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mtimeLeftInMillis = millisUntilFinished;
+
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                isScreenOn = pm.isInteractive();
+                if(!isScreenOn){
+                   //resetTimer();
+                    mTimerRunning = false;
+                    return;
+                }
 
             }
             @Override
             public void onFinish() {
         //        mTimerRunning = false;
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("textTitle")
+                .setContentText(mHelper.getCommentData())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             }
         }.start();
@@ -274,9 +299,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void resetTimer() {
-        mtimeLeftInMillis = mStartTimeInMillis;
-    }
+//    private void resetTimer() {
+//        mtimeLeftInMillis = mStartTimeInMillis;
+//    }
 
 }
 
