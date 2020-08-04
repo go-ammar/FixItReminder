@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer mCountDownTimer;
 
     long totalDelay;
-    long mStartTimeInMillis;
     long mtimeLeftInMillis;
     long mEndTime;
 
@@ -35,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler();
 
     boolean isScreenOn;
-    boolean mTimerRunning=false;
+    boolean mScreenOn =false;
+    boolean timerRunning=false;
+
+    Context mContext;
 
 
     //call resetTimer every time isScreenOn is false
@@ -54,14 +56,16 @@ public class MainActivity extends AppCompatActivity {
         hours = findViewById(R.id.editTextHours);
         mButtonshift = findViewById(R.id.shift_button);
 
-        totalDelay = mHelper.getTimeData();
+        totalDelay = 10000;
+//        totalDelay = mHelper.getTimeData();
+
 
 //        setTime(totalDelay);
 //        startTimer();
 
 
 
-            //TODO this is how to show notification
+        //TODO this is how to show notification
 
 //        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
 //                .setSmallIcon(R.drawable.ic_launcher_background)
@@ -104,15 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if(isScreenOn){
-        //  startTimer(totalDelay);
-        }
 
         final Context context = this;
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 //do something
-                if(!mTimerRunning) {
+                if(!mScreenOn) {
                     startTimer(totalDelay, context);
                 }
 
@@ -144,19 +145,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        isScreenOn = pm.isInteractive();
 
-
-        startTimer(totalDelay, this);
-
-
+        final Context context = this;
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 //do something
-                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                isScreenOn = pm.isInteractive();
-                //              Log.d("humariApp", "onStop after delay again and again: " + isScreenOn);
+                if(!mScreenOn) {
+                    mCountDownTimer.cancel();
+
+                    startTimer(totalDelay, context);
+                }
+
+                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
                 handler.postDelayed(runnable, 1000);
             }
         }, 1000);
@@ -183,53 +183,49 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        isScreenOn = pm.isInteractive();
 
+        final Context context = this;
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 //do something
-                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                isScreenOn = pm.isInteractive();
-                //               Log.d("humariApp", "onPause after delay again and again: " + isScreenOn);
-                handler.postDelayed(runnable, totalDelay);
-            }
-        }, totalDelay);
+                if(!mScreenOn) {
+                    mCountDownTimer.cancel();
+                    startTimer(totalDelay, context);
+                }
 
-//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-//        isScreenOn = pm.isInteractive();
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                //TODO your background code
-//                Log.d("humariApp", "onPause " + isScreenOn);
-//            }
-//        });
+                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, 1000);
+            }
+        }, 1000);
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        isScreenOn = pm.isInteractive();
 
+
+
+        final Context context = this;
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 //do something
-                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                isScreenOn = pm.isInteractive();
+                if(!mScreenOn) {
+                    mCountDownTimer.cancel();
+                    startTimer(totalDelay, context);
+                }
 
-
-
-                //             Log.d("humariApp", "onResume after delay again and again: " + isScreenOn);
-                handler.postDelayed(runnable, totalDelay);
+                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+                handler.postDelayed(runnable, 1000);
             }
-        }, totalDelay);
+        }, 1000);
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -260,14 +256,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//
-//    private void setTime(long milliseconds) {
-//        mStartTimeInMillis = milliseconds;
-//        resetTimer();
-//    }
 
-        private void startTimer(long totalTime, final Context context) {
-        mTimerRunning = true;
+// long variable which keeps track of time spent shuru mae hoga 0.
+// time 10000 apne guzaar liye 6000 secs
+// remaining time should be 4000 secs.
+// 10000 - 6000.
+//10000 was totalTime and 6000 was time spent
+// inititally it was 10000-0;
+// what was the 0??? the long variable.
+
+
+
+
+    private void startTimer(long totalTime, final Context context) {
+        timerRunning = true;
+        mScreenOn = true;
         mEndTime = System.currentTimeMillis() + mtimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(totalTime, 1000) {
             @Override
@@ -276,25 +279,28 @@ public class MainActivity extends AppCompatActivity {
 
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 isScreenOn = pm.isInteractive();
+                Log.d("HumariApp", "onTick: " + millisUntilFinished );
                 if(!isScreenOn){
-                   //resetTimer();
-                    mTimerRunning = false;
+                    //resetTimer();
+                    mScreenOn = false;
+                    timerRunning = false;
                     return;
                 }
 
             }
             @Override
             public void onFinish() {
-        //        mTimerRunning = false;
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("textTitle")
-                .setContentText(mHelper.getCommentData())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                //        mTimerRunning = false;
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("textTitle")
+                        .setContentText(mHelper.getCommentData())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                Log.d("HumariApp", "onFinish: " );
 
             }
         }.start();
-      //  mTimerRunning = true;
+        //  mTimerRunning = true;
     }
 
 

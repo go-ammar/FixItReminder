@@ -29,7 +29,7 @@ public class Reminder extends AppCompatActivity {
 
 
 
-        Log.d("humariApp", "onCreate reminder activity: ");
+        Log.d("humariApp", "onCreate reminder activity: " + this );
         try  {
             DatabaseHelper databaseHelper = db = new DatabaseHelper(this);
         }
