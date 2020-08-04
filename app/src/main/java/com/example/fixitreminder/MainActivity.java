@@ -1,12 +1,12 @@
 package com.example.fixitreminder;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
@@ -23,13 +23,21 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper mHelper;
     Button mButtonshift;
 
-    int totalDelay = 5000;
+    CountDownTimer mCountDownTimer;
+
+    long totalDelay;
+    long mStartTimeInMillis;
+    long mtimeLeftInMillis;
+    long mEndTime;
 
     Runnable runnable;
     Handler handler = new Handler();
 
     boolean isScreenOn;
 
+
+    //call resetTimer every time isScreenOn is false
+    //if isScreenOn is true then startTimer. abh yahan pe variables pass krne hai to different states
 
 
     @Override
@@ -39,25 +47,30 @@ public class MainActivity extends AppCompatActivity {
         mHelper = new DatabaseHelper(this);
 
         message = findViewById(R.id.EditTextmessage);
-        mButton =  findViewById(R.id.saveButton);
+        mButton = findViewById(R.id.saveButton);
         mins = findViewById(R.id.editTextMins);
-        hours =  findViewById(R.id.editTextHours);
+        hours = findViewById(R.id.editTextHours);
         mButtonshift = findViewById(R.id.shift_button);
 
-        totalDelay = mHelper.getTimeData();
+//        totalDelay = mHelper.getTimeData();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("textTitle")
-                .setContentText(mHelper.getCommentData())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//        setTime(totalDelay);
+//        startTimer();
+
+
+
+
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.drawable.ic_launcher_background)
+//                .setContentTitle("textTitle")
+//                .setContentText(mHelper.getCommentData())
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO what happens when you click the save button? logic goes here.
-//totalDelay = 1000 * 60 * Integer.parseInt(mins.getText().toString()) + (Integer.parseInt(hours.getText().toString()) * 60);
 
                 mHelper.insertData(1000 * 60 * Integer.parseInt(mins.getText().toString()) +
                                 (Integer.parseInt(hours.getText().toString()) * 60),
@@ -73,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         mButtonshift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Reminder.class );
+                Intent intent = new Intent(getApplicationContext(), Reminder.class);
                 startActivity(intent);
                 finishActivity(1);
             }
@@ -85,15 +99,22 @@ public class MainActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         isScreenOn = pm.isInteractive();
 
-        handler.postDelayed(runnable = new Runnable() {
-            public void run() {
-                //do something
-                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                isScreenOn = pm.isInteractive();
-                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
-                handler.postDelayed(runnable, totalDelay);
-            }
-        }, totalDelay);
+
+
+        if(isScreenOn){
+          startTimer();
+        }
+
+
+//        handler.postDelayed(runnable = new Runnable() {
+//            public void run() {
+//                //do something
+//                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//                isScreenOn = pm.isInteractive();
+//                //           Log.d("humariApp", "onCreate after delay again and again: " + isScreenOn);
+//                handler.postDelayed(runnable, totalDelay);
+//            }
+//        }, totalDelay);
 
 
 //        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -110,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
 
     @Override
     protected void onStop() {
@@ -221,14 +245,42 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
 
-
         Log.d("humariApp", "onDestroy: ");
 
 
     }
 
+    private void setTime(long milliseconds) {
+        mStartTimeInMillis = milliseconds;
+        resetTimer();
+    }
+
+    private void startTimer() {
+        mEndTime = System.currentTimeMillis() + mtimeLeftInMillis;
+        mCountDownTimer = new CountDownTimer(mtimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mtimeLeftInMillis = millisUntilFinished;
+
+            }
+            @Override
+            public void onFinish() {
+        //        mTimerRunning = false;
+
+            }
+        }.start();
+      //  mTimerRunning = true;
+    }
+
+
+
+    private void resetTimer() {
+        mtimeLeftInMillis = mStartTimeInMillis;
+    }
 
 }
+
+
 
 
 /*
