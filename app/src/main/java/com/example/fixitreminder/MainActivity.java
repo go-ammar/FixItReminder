@@ -1,6 +1,7 @@
 package com.example.fixitreminder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 
 import android.content.Context;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     boolean isScreenOn;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
         hours =  findViewById(R.id.editTextHours);
         mButtonshift = findViewById(R.id.shift_button);
 
+        totalDelay = mHelper.getTimeData();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("textTitle")
+                .setContentText(mHelper.getCommentData())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,9 +63,13 @@ public class MainActivity extends AppCompatActivity {
                                 (Integer.parseInt(hours.getText().toString()) * 60),
                         message.getText().toString().trim());
 
-                message.setText(R.string.reminder_text);
-                mins.setText(R.string.time_mins);
-                hours.setText(R.string.time_hrs);
+                mins.setText("");
+                message.setText("");
+                hours.setText("");
+
+                mins.setHint(R.string.time_mins);
+                hours.setHint(R.string.time_hrs);
+                message.setHint(R.string.reminder_text);
             }
         });
 

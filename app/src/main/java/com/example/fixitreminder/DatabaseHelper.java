@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String getData() {
+    public String getCommentData() {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = new String[]{COL_0, COL_1, COL_2, COL_3};
         Cursor cursor = db.query(table_name, columns, null, null,
@@ -104,7 +104,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int iRowComment = cursor.getColumnIndex(COL_2);
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            comment = comment + cursor.getString(iRowComment) + "\n";
+            comment = "";
+            comment = comment + cursor.getString(iRowComment);
+        }
+        cursor.close();
+        return comment;
+    }
+
+    public int getTimeData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COL_0, COL_1, COL_2, COL_3};
+        Cursor cursor = db.query(table_name, columns, null, null,
+                null, null, null);
+        int time= 0;
+        int iRowId = cursor.getColumnIndex(COL_0);
+        int iRowTime = cursor.getColumnIndex(COL_1);
+        int iRowComment = cursor.getColumnIndex(COL_2);
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            time = cursor.getInt(iRowTime);
+        }
+        cursor.close();
+        return time;
+    }
+
+
+
+    public String[] getDataString() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COL_0, COL_1, COL_2, COL_3};
+        Cursor cursor = db.query(table_name, columns, null, null,
+                null, null, null);
+        String [] comment = new String[cursor.getCount()];
+        int iRowId = cursor.getColumnIndex(COL_0);
+        int iRowTime = cursor.getColumnIndex(COL_1);
+        int iRowComment = cursor.getColumnIndex(COL_2);
+        int i =0;
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            comment[i] = cursor.getString(iRowComment);
+            i++;
         }
         cursor.close();
 
